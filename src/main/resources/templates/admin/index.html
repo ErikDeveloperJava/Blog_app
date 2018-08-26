@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+	<!-- Document Settings -->
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+	<!-- Page Title -->
+	<title>Admin</title>
+	<!-- Fonts -->
+	<link
+		href="https://fonts.googleapis.com/css?family=Lato:300,400,400i,700,700i%7cOswald:300,400,500,600,700%7cPlayfair+Display:400,400i,700,700i"
+		rel="stylesheet">
+	<!-- Styles -->
+	<link rel="stylesheet" href="/resources/assets/css/bootstrap.min.css">
+	<link rel="stylesheet" href="/resources/assets/css/font-awesome.min.css">
+	<link rel="stylesheet" href="/resources/assets/css/slick-theme.css">
+	<link rel="stylesheet" href="/resources/assets/css/slick.css">
+	<link rel="stylesheet" href="/resources/assets/css/style.css">
+</head>
+<body>
+<header>
+	<div class="kotha-menu marketing-menu">
+		<nav class="navbar  navbar-default">
+			<div class="container">
+				<div class="menu-content">
+					<!-- Brand and toggle get grouped for better mobile display -->
+					<div class="navbar-header">
+						<button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
+								data-target="#myNavbar">
+							<span class="sr-only">Toggle navigation</span>
+							<span class="icon-bar"></span>
+							<span class="icon-bar"></span>
+							<span class="icon-bar"></span>
+						</button>
+					</div>
+					<div class="collapse navbar-collapse" id="myNavbar">
+						<ul class="top-social-icons list-inline pull-right">
+							<li><a href="https://www.facebook.com"><i class="fa fa-facebook"></i></a></li>
+							<li><a href="https://www.twitter.com"><i class="fa fa-twitter"></i></a></li>
+							<li><a href="https://www.instagram.com"><i class="fa fa-instagram"></i></a></li>
+							<li><a href="https://www.google.com"><i class="fa fa-google-plus"></i></a></li>
+						</ul>
+						<ul class="nav navbar-nav text-uppercase pull-left">
+							<li><a href="/">Home</a></li>
+							<li><a href="/gallery">Gallery</a></li>
+							<li><a href="/admin/posts">Posts</a></li>
+							<li><a href="/admin/post/add">Post add</a></li>
+							<li><a href="/admin/category/add">Category add</a></li>
+							<li>
+								<a href="/logout">Logout</a>
+							</li>
+						</ul>
+					</div>
+				</div>
+			</div>
+			<!-- /.container-fluid -->
+		</nav>
+	</div>
+	<div class="kotha-logo text-center">
+		<h1>
+			<a href="/">
+				<img width="300px" height="100px" src="/resources/logo/logo.gif" alt="kothPro">
+			</a>
+		</h1>
+	</div>
+</header>
+
+<div class="kotha-default-content">
+	<div class="container">
+		<div class="row">
+			<div class="col-sm-8" id="user-blog">
+				<div class="row">
+					<th:block th:each="u : ${users}" th:if="${u.id} ne ${user.id}" th:object="${u}">
+						<div class="col-md-12">
+							<article class="single-blog post-list">
+								<div class="media">
+									<div style="width: 154px"  class="media-left">
+										<div class="post-thumb">
+											<img width="40px" height="100px" th:src="@{/resources/users/{img}(img = *{imgUrl})}" alt="">
+										</div>
+									</div>
+									<div class="media-body">
+										<div class="post-content">
+											<div class="entry-header text-left text-uppercase">
+												<a style="cursor: pointer" th:id="*{id}" class="post-cat delete-user">Delete</a>
+												<h2 th:text="*{name} + ' ' + *{surname}"></h2>
+											</div>
+										</div>
+									</div>
+								</div>
+							</article>
+						</div>
+					</th:block>
+					<div class="col-md-12" th:if="${#lists.size(users) > 0}">
+						<div class="post-pagination clearfix">
+							<ul class="pagination text-left">
+								<th:block th:each="index :${#numbers.sequence(0,length)}">
+									<li class="active" th:if="${index} == ${pageNumber}">
+										<a style="cursor: pointer" id="active-page" th:text="${index + 1}">1</a>
+									</li>
+									<li th:if="${index} != ${pageNumber}">
+										<a th:href="@{${#request.getRequestURI()}(page = ${index + 1})}" th:text="${index + 1}">2</a>
+									</li>
+								</th:block>
+								<li th:if="${length} eq ${pageNumber}">
+									<a style="cursor: pointer"><i class="fa fa-angle-double-right"></i></a>
+								</li>
+								<li th:unless="${length} eq ${pageNumber}">
+									<a th:href="@{${#request.getRequestURI()}(page = ${pageNumber + 2})}"><i class="fa fa-angle-double-right"></i></a>
+								</li>
+							</ul>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-sm-4">
+				<div class="kotha-sidebar">
+					<aside class="widget about-me-widget  text-center">
+						<div class="about-me-content">
+							<div class="about-me-img">
+								<img height="100px" width="100px" th:src="@{/resources/users/{img}(img = ${user.imgUrl})}" alt="" class="img-me img-circle">
+								<a th:href="@{/user/{id}(id = ${user.id})}">
+									<h2 class="text-uppercase" th:text="${user.name} + ' '  + ${user.surname}"></h2>
+								</a>
+							</div>
+						</div>
+						<div class="social-share">
+							<ul class="list-inline">
+								<li><a class="s-facebook" href="http://www.facebook.com"><i
+										class="fa fa-facebook"></i></a></li>
+								<li><a class="s-twitter" href="http://www.twitter.com"><i class="fa fa-twitter"></i></a>
+								</li>
+								<li><a class="s-google-plus" href="http://www.google.com"><i
+										class="fa fa-google-plus"></i></a></li>
+								<li><a class="s-instagram" href="http://www.instagram.com"><i class="fa fa-instagram"></i></a>
+								</li>
+							</ul>
+						</div>
+					</aside>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<footer>
+	<div class="container">
+		<div class="footer-widget-row">
+			<div class="footer-widget contact-widget">
+				<p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt
+					ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eaccusam et justo duo
+					dolores eteem.</p>
+				<div class="address">
+					<h4 class="text-uppercase">contact Info</h4>
+					<p> 239/2 NK Street, DC, USA</p>
+					<p> Phone: +123 456 78900</p>
+					<a href="mailto:theme@kotha.com">theme@kotha.com</a>
+				</div>
+			</div>
+			<div class="footer-widget twitter-widget">
+				<h2 class="widget-title text-uppercase">
+					Latest TWeeTs
+				</h2>
+				<div class="single-tweet">
+					<p>Check our new theme 'kotha - Personal WordPress Blog Theme' on #themeforest #Envato
+						#WordPress <br>
+						<a style="cursor: pointer">https://t.co/kN5OPEuPzx</a></p>
+					<h4><i class="fa fa-twitter"></i>Tweeted on 17 hours ago</h4>
+				</div>
+				<div class="single-tweet">
+					<p>Check our new theme 'kotha - Personal WordPress Blog Theme' on #themeforest #Envato
+						#WordPress
+						<br>
+						<a style="cursor: pointer">https://t.co/kN5OPEuPzx</a></p>
+					<h4><i class="fa fa-twitter"></i>Tweeted on 17 hours ago</h4>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="container-fluid text-center ft-copyright">
+		<p>&copy; 2017 M Y ___ B L O G</p>
+	</div>
+</footer>
+<div class="scroll-up">
+	<a style="cursor: pointer"><i class="fa fa-angle-up"></i></a>
+</div>
+<!--//Script//-->
+<script src="/resources/assets/js/jquery-1.12.4.min.js"></script>
+<script src="/resources/assets/js/bootstrap.min.js"></script>
+<script src="/resources/assets/js/slick.min.js"></script>
+<script src="/resources/assets/js/main.js"></script>
+<script src="/resources/js/user.js"></script>
+</body>
+</html>

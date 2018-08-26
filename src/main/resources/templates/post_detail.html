@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <!-- Document Settings -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta id="popularsLoad" content="true">
+    <meta id="galleriesLoad" content="true">
+    <meta id="postId" th:content="${post.id}">
+    <!-- Page Title -->
+    <title>Post detail</title>
+    <!-- Fonts -->
+    <link
+            href="https://fonts.googleapis.com/css?family=Lato:300,400,400i,700,700i%7cOswald:300,400,500,600,700%7cPlayfair+Display:400,400i,700,700i"
+            rel="stylesheet">
+    <!-- Styles -->
+    <link rel="stylesheet" href="/resources/assets/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/resources/assets/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/resources/assets/css/slick-theme.css">
+    <link rel="stylesheet" href="/resources/assets/css/slick.css">
+    <link rel="stylesheet" href="/resources/assets/css/style.css">
+
+</head>
+<body>
+
+<header>
+    <div class="kotha-menu marketing-menu">
+        <nav class="navbar  navbar-default">
+            <div class="container">
+                <div class="menu-content">
+                    <!-- Brand and toggle get grouped for better mobile display -->
+                    <div class="navbar-header">
+                        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
+                                data-target="#myNavbar">
+                            <span class="sr-only">Toggle navigation</span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </button>
+                    </div>
+                    <div class="collapse navbar-collapse" id="myNavbar">
+                        <ul class="top-social-icons list-inline pull-right">
+                            <li><a href="https://www.facebook.com"><i class="fa fa-facebook"></i></a></li>
+                            <li><a href="https://www.twitter.com"><i class="fa fa-twitter"></i></a></li>
+                            <li><a href="https://www.instagram.com"><i class="fa fa-instagram"></i></a></li>
+                            <li><a href="https://www.google.com"><i class="fa fa-google-plus"></i></a></li>
+                            <li class="top-search">
+                                <a style="cursor: pointer" class="sactive">
+                                    <i class="fa fa-search"></i>
+                                </a>
+                            </li>
+                        </ul>
+                        <ul class="nav navbar-nav text-uppercase pull-left">
+                            <li><a href="/">Home</a></li>
+                            <li class="dropdown">
+                                <a style="cursor: pointer" class="dropdown-toggle" data-toggle="dropdown"
+                                   role="button"
+                                   aria-haspopup="true" aria-expanded="false">Categories</a>
+                                <ul class="dropdown-menu" id="cat-blog">
+
+                                </ul>
+                            </li>
+
+                            <li><a href="/gallery">Gallery</a></li>
+                            <li><a href="/about">About me</a></li>
+                            <li th:if="${#strings.equals(user.role,'USER')}">
+                                <a th:href="@{/user/{id}(id = ${user.id})}">My account</a>
+                            </li>
+                            <li th:if="${#strings.equals(user.role,'USER')}">
+                                <a href="/logout">Logout</a>
+                            </li>
+                            <li th:if="${#strings.equals(user.role,'ROLE_ANONYMOUS')}">
+                                <a href="/login">Login</a>
+                            </li>
+                            <li th:if="${#strings.equals(user.role,'ROLE_ANONYMOUS')}">
+                                <a href="/register">Register</a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="show-search">
+                        <form role="search" method="get" id="searchform" action="/post/search">
+                            <input type="text" placeholder="Search post..." name="title" id="s">
+                            <button type="submit" style="border-style: none;background: none">
+                                <img src="/resources/logo/search.png">
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <!-- /.container-fluid -->
+        </nav>
+    </div>
+    <div class="kotha-logo text-center">
+        <h1>
+            <a href="/">
+                <img width="300px" height="100px" src="/resources/logo/logo.gif" alt="kothPro">
+            </a>
+        </h1>
+    </div>
+</header>
+<div class="kotha-default-content">
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-8">
+                <article class="single-blog">
+                    <div class="post-thumb">
+                        <img th:src="@{/resources/posts/{img}(img = ${post.imgUrl})}" alt="">
+                    </div>
+                    <div class="post-content">
+                        <div class="entry-header text-center text-uppercase">
+                            <a th:href="@{/posts/category/{id}(img = ${post.category.id})}" class="post-cat" th:text="${post.category.name}"></a>
+                            <h2 th:text="${post.title}">title</h2>
+                        </div>
+                        <div class="entry-content">
+                            <p th:text="${post.description}"></p>
+                        </div>
+
+                        <div class="post-meta">
+                            <ul class="pull-left list-inline author-meta">
+                                <li class="date" th:text="${#dates.format(post.createdDate,'dd.MM.yyyy')}">date</li>
+                            </ul>
+                            <ul class="pull-right list-inline social-share">
+                                <li><a class="s-facebook" href="http://www.facebook.com"><i
+                                        class="fa fa-facebook"></i></a></li>
+                                <li><a class="s-twitter" href="http://www.twitter.com"><i class="fa fa-twitter"></i></a>
+                                </li>
+                                <li><a class="s-google-plus" href="http://www.google.com"><i
+                                        class="fa fa-google-plus"></i></a></li>
+                                <li><a class="s-instagram" href="http://www.instagram.com"><i class="fa fa-instagram"></i></a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </article>
+                <div class="comment-area" id="comment-blog">
+                    <div class="comment-heading">
+                        <h3><span id="comments-count"></span>comments</h3>
+                    </div>
+                </div>
+                <!--leave comment-->
+                <div class="leave-comment">
+                    <h4 th:if="${#strings.equals(user.role,'USER')}">Send comment</h4>
+                    <h4 style="position:relative;left: 20px;" th:unless="${#strings.equals(user.role,'USER')}">Send comment</h4>
+                    <form th:if="${#strings.equals(user.role,'USER')}" class="form-horizontal contact-form comment-form" method="post"
+                          action="/post/comment/add">
+                        <div class="form-group">
+                            <div class="col-md-12">
+                                <textarea class="form-control comment-text" rows="6" placeholder="Write your comment"></textarea>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn send-btn">send</button>
+                    </form>
+                    <div th:unless="${#strings.equals(user.role,'USER')}">
+                        <div class="form-group">
+                            <div class="col-md-12">
+                                <textarea class="form-control" rows="6" placeholder="Write your comment"></textarea>
+                            </div>
+                        </div>
+                        <form  class="form-horizontal contact-form" action="/login">
+                            <br/>
+                            <button style="position: relative;left: 17px;top: 10px" type="submit" class="btn send-btn">send</button>
+                        </form>
+                    </div>
+
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <div class="kotha-sidebar">
+                    <aside th:if="${#strings.equals(user.role,'USER')}" class="widget about-me-widget  text-center">
+                        <div class="about-me-content">
+                            <div class="about-me-img">
+                                <img height="100px" width="100px" th:src="@{/resources/users/{img}(img = ${user.imgUrl})}" alt="" class="img-me img-circle">
+                                <a th:href="@{/user/{id}(id = ${user.id})}">
+                                    <h2 class="text-uppercase" th:text="${user.name} + ' '  + ${user.surname}"></h2>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="social-share">
+                            <ul class="list-inline">
+                                <li><a class="s-facebook" href="http://www.facebook.com"><i
+                                        class="fa fa-facebook"></i></a></li>
+                                <li><a class="s-twitter" href="http://www.twitter.com"><i class="fa fa-twitter"></i></a>
+                                </li>
+                                <li><a class="s-google-plus" href="http://www.google.com"><i
+                                        class="fa fa-google-plus"></i></a></li>
+                                <li><a class="s-instagram" href="http://www.instagram.com"><i class="fa fa-instagram"></i></a>
+                                </li>
+                            </ul>
+                        </div>
+                    </aside>
+                    <aside class="widget widget-popular-post">
+                        <h3 class="widget-title text-uppercase text-center">Popular Posts</h3>
+                        <ul id="popular-posts-blog">
+
+                        </ul>
+                    </aside>
+                    <aside class="widget insta-widget">
+                        <h2 class="widget-title text-uppercase text-center">Gallery</h2>
+                        <div class="instagram-feed" id="gallery-blog">
+                        </div>
+                    </aside>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<footer>
+    <div class="container">
+        <div class="footer-widget-row">
+            <div class="footer-widget contact-widget">
+                <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt
+                    ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eaccusam et justo duo
+                    dolores eteem.</p>
+                <div class="address">
+                    <h4 class="text-uppercase">contact Info</h4>
+                    <p> 239/2 NK Street, DC, USA</p>
+                    <p> Phone: +123 456 78900</p>
+                    <a href="mailto:theme@kotha.com">theme@kotha.com</a>
+                </div>
+            </div>
+            <div class="footer-widget twitter-widget">
+                <h2 class="widget-title text-uppercase">
+                    Latest TWeeTs
+                </h2>
+                <div class="single-tweet">
+                    <p>Check our new theme 'kotha - Personal WordPress Blog Theme' on #themeforest #Envato
+                        #WordPress <br>
+                        <a style="cursor: pointer">https://t.co/kN5OPEuPzx</a></p>
+                    <h4><i class="fa fa-twitter"></i>Tweeted on 17 hours ago</h4>
+                </div>
+                <div class="single-tweet">
+                    <p>Check our new theme 'kotha - Personal WordPress Blog Theme' on #themeforest #Envato
+                        #WordPress
+                        <br>
+                        <a style="cursor: pointer">https://t.co/kN5OPEuPzx</a></p>
+                    <h4><i class="fa fa-twitter"></i>Tweeted on 17 hours ago</h4>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container-fluid text-center ft-copyright">
+        <p>&copy; 2017 M Y ___ B L O G</p>
+    </div>
+</footer>
+<div class="scroll-up">
+    <a style="cursor: pointer"><i class="fa fa-angle-up"></i></a>
+</div>
+<!--//Script//-->
+<script src="/resources/assets/js/jquery-1.12.4.min.js"></script>
+<script src="/resources/assets/js/bootstrap.min.js"></script>
+<script src="/resources/assets/js/slick.min.js"></script>
+<script src="/resources/assets/js/main.js"></script>
+<script src="/resources/js/generic.js"></script>
+<script src="/resources/js/comment.js"></script>
+</body>
+</html>

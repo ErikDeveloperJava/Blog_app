@@ -1,0 +1,43 @@
+<div class="row" xmlns:th="http://www.thymeleaf.org">
+    <th:block th:each="post : ${posts}" th:object="${post}">
+        <div class="col-md-12">
+            <article class="single-blog post-list">
+                <div class="media">
+                    <div style="width: 154px"  class="media-left">
+                        <div class="post-thumb">
+                            <img width="40px" height="100px" th:src="@{/resources/posts/{img}(img = *{imgUrl})}" alt="">
+                        </div>
+                    </div>
+                    <div class="media-body">
+                        <div class="post-content">
+                            <div class="entry-header text-left text-uppercase">
+                                <a style="cursor: pointer" th:id="*{id}" class="post-cat delete-post">Delete</a>
+                                <h2 th:text="*{title}">title</h2>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </article>
+        </div>
+    </th:block>
+    <div class="col-md-12" th:if="${#lists.size(posts) > 0}">
+        <div class="post-pagination clearfix">
+            <ul class="pagination text-left">
+                <th:block th:each="index :${#numbers.sequence(0,length)}">
+                    <li class="active" th:if="${index} == ${pageNumber}">
+                        <a style="cursor: pointer" id="active-page" th:text="${index + 1}">1</a>
+                    </li>
+                    <li th:if="${index} != ${pageNumber}">
+                        <a th:href="@{${#request.getRequestURI()}(page = ${index + 1})}" th:text="${index + 1}">2</a>
+                    </li>
+                </th:block>
+                <li th:if="${length} eq ${pageNumber}">
+                    <a style="cursor: pointer"><i class="fa fa-angle-double-right"></i></a>
+                </li>
+                <li th:unless="${length} eq ${pageNumber}">
+                    <a th:href="@{${#request.getRequestURI()}(page = ${pageNumber + 2})}"><i class="fa fa-angle-double-right"></i></a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
